@@ -13,6 +13,7 @@ import {
   runRehatch,
   runRestore,
 } from "./cli/commands.js";
+import { assertStandaloneLaunch } from "./cli/guard.js";
 
 function printHelp(): void {
   console.log(`
@@ -46,6 +47,8 @@ Flags:
 
 说明:
   默认进入中文交互式向导
+  推荐通过 buddy-studio 或 pnpm run studio 启动
+  不要在 Claude Code / mc --code 代理终端里直接启动交互 TUI
   --hat 可省略；省略时表示不限制帽子
 `);
 }
@@ -54,6 +57,7 @@ async function main() {
   const parsed = parseArgs(process.argv);
   switch (parsed.command) {
     case undefined:
+      assertStandaloneLaunch();
       await runInteractiveApply(parsed);
       break;
     case "apply":

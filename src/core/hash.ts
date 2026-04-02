@@ -18,6 +18,11 @@ export function hashBunSync(value: string): number {
   if (cached !== undefined) {
     return cached;
   }
+  if (typeof Bun !== "undefined") {
+    const direct = Number(BigInt(Bun.hash(value)) & 0xffffffffn);
+    bunHashCache.set(value, direct);
+    return direct;
+  }
   const result = execFileSync(
     "bun",
     [

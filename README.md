@@ -21,11 +21,18 @@ pnpm build
 ## Usage
 
 ```bash
-pnpm dev
-pnpm dev -- current
-pnpm dev -- doctor --json
-pnpm dev -- apply --species cat --rarity legendary --eye '◉' --hat beanie --shiny
+buddy-studio
+pnpm run studio
+buddy-studio current
+buddy-studio doctor --json
+buddy-studio apply --species cat --rarity legendary --eye '◉' --hat beanie --shiny
 ```
+
+## Launch boundary
+
+- Interactive TUI should be launched only from a normal shell terminal.
+- Do not start it inside Claude Code or `mc --code` proxy terminals.
+- If Buddy Studio detects a Claude/proxy launch chain, it will refuse to start the interactive wizard and tell you to run `buddy-studio` or `pnpm run studio` in a standalone shell.
 
 ## Safety model
 
@@ -39,4 +46,5 @@ pnpm dev -- apply --species cat --rarity legendary --eye '◉' --hat beanie --sh
 pnpm check
 pnpm test
 pnpm build
+pnpm run studio
 ```

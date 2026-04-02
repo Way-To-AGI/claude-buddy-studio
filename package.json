@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsx src/index.ts",
+    "studio": "tsx src/index.ts",
+    "dev": "tsx src/index.ts help",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "tsc -p tsconfig.json --noEmit"
