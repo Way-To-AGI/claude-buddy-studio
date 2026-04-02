@@ -69,12 +69,17 @@ function hasCompleteTarget(input: Partial<TargetBuddySpec>): input is TargetBudd
 function printEnvironmentSummary() {
   const environment = detectClaudeEnvironment();
   console.log(chalk.bold("\n环境信息"));
-  console.log(`  安装形态=${environment.installShape}`);
+  console.log(`  安装形态=${environment.installMethod}`);
   console.log(`  哈希模式=${environment.hashMode}`);
   console.log(`  身份源=${environment.effectiveIdentitySource}:${environment.effectiveIdentityValue}`);
   console.log(`  配置文件=${environment.configPath ?? "未找到"}`);
-  console.log(`  二进制=${environment.binaryPath ?? "未找到"}`);
+  console.log(`  启动器=${environment.launcherPath ?? "未找到"}`);
+  console.log(`  目标文件=${environment.resolvedBinaryPath ?? "未找到"}`);
   console.log(`  可用后端=${environment.availableBackends.join(", ") || "无"}`);
+  if (environment.binaryState) {
+    console.log(`  目标类型=${environment.binaryState.fileKind}`);
+    console.log(`  patch状态=${environment.binaryState.patchable ? "可用" : "不可用"} (${environment.binaryState.patchableReason})`);
+  }
   for (const warning of environment.warnings) {
     console.log(chalk.yellow(`  警告=${warning}`));
   }

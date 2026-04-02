@@ -34,7 +34,8 @@ describe("CLI doctor", () => {
     );
 
     expect(output).toContain("环境信息");
-    expect(output).toContain("\"installShape\": \"npm-node\"");
+    expect(output).toContain("\"installMethod\": \"npm-global-node\"");
     expect(output).toContain("\"availableBackends\"");
+    expect(output).toContain("\"resolvedBinaryPath\"");
   });
 });

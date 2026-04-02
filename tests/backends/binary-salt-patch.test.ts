@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { binarySaltPatchBackend } from "../../src/backends/binary-salt-patch.js";
 import { detectClaudeEnvironment } from "../../src/integrations/claude/detect.js";
 import { ORIGINAL_SALT } from "../../src/core/constants.js";
-import { createTempHome, withTempProcessEnv, writeClaudeConfigFile, writeFakeBinary } from "../helpers.js";
+import { createTempHome, withTempProcessEnv, writeClaudeConfigFile, writeFakeNativeBinary } from "../helpers.js";
 
 describe("binary-salt-patch backend", () => {
   it("patches and restores the Claude binary fallback path", async () => {
@@ -15,7 +15,7 @@ describe("binary-salt-patch backend", () => {
       oauthAccount: { accountUuid: "native-bun-account-id" },
       companion: { name: "Ghost", personality: "Already hatched." },
     });
-    writeFakeBinary(binaryPath);
+    writeFakeNativeBinary(binaryPath);
 
     await withTempProcessEnv(
       {

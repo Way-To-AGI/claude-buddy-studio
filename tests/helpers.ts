@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -24,6 +24,45 @@ export function writeFakeBinary(binaryPath: string, salt = ORIGINAL_SALT): strin
   ].join("\n");
   writeFileSync(binaryPath, contents, "utf8");
   return binaryPath;
+}
+
+export function writeFakeNativeBinary(binaryPath: string, salt = ORIGINAL_SALT): string {
+  mkdirSync(dirname(binaryPath), { recursive: true });
+  const header = Buffer.from([0xcf, 0xfa, 0xed, 0xfe]);
+  const body = Buffer.from(
+    [
+      "NATIVE",
+      salt,
+      "BUDDY",
+      salt,
+      "TARGET",
+      salt,
+    ].join("\x00"),
+    "utf8",
+  );
+  writeFileSync(binaryPath, Buffer.concat([header, body]));
+  return binaryPath;
+}
+
+export function writeFakeBrewLauncher(homeDir: string, salt = ORIGINAL_SALT): {
+  launcherPath: string;
+  resolvedPath: string;
+} {
+  const resolvedPath = join(
+    homeDir,
+    "opt",
+    "homebrew",
+    "lib",
+    "node_modules",
+    "@anthropic-ai",
+    "claude-code",
+    "cli.js",
+  );
+  const launcherPath = join(homeDir, "opt", "homebrew", "bin", "claude");
+  writeFakeBinary(resolvedPath, salt);
+  mkdirSync(dirname(launcherPath), { recursive: true });
+  symlinkSync(resolvedPath, launcherPath);
+  return { launcherPath, resolvedPath };
 }
 
 export async function withTempProcessEnv<T>(

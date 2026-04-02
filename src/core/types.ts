@@ -4,6 +4,22 @@ export type BackendKind = (typeof BACKEND_KINDS)[number];
 export const HASH_MODES = ["fnv1a", "bun"] as const;
 export type HashMode = (typeof HASH_MODES)[number];
 
+export const CLAUDE_INSTALL_METHODS = [
+  "npm-global-node",
+  "brew-node-shim",
+  "native-install",
+  "unknown",
+] as const;
+export type ClaudeInstallMethod = (typeof CLAUDE_INSTALL_METHODS)[number];
+
+export const CLAUDE_BINARY_KINDS = [
+  "node-js",
+  "native-executable",
+  "shell-script",
+  "unknown",
+] as const;
+export type ClaudeBinaryKind = (typeof CLAUDE_BINARY_KINDS)[number];
+
 export const CANDIDATE_KINDS = ["userId", "salt"] as const;
 export type CandidateKind = (typeof CANDIDATE_KINDS)[number];
 
@@ -101,18 +117,24 @@ export interface SolveOptions {
 
 export interface BinaryState {
   path: string;
+  fileKind: ClaudeBinaryKind;
   currentSalt?: string;
   originalSaltOccurrences: number;
   patchable: boolean;
+  patchableReason: string;
 }
 
 export interface DetectedEnvironment {
   installShape: "npm-node" | "native-bun" | "unknown";
+  installMethod: ClaudeInstallMethod;
   hashMode: HashMode;
   configPath?: string;
   settingsPath: string;
   toolStatePath: string;
+  launcherPath?: string;
+  resolvedBinaryPath?: string;
   binaryPath?: string;
+  pathEvidence: string[];
   effectiveIdentitySource: "oauthAccount.accountUuid" | "userID" | "anon";
   effectiveIdentityValue: string;
   availableBackends: BackendKind[];
